@@ -28,13 +28,8 @@ export default {
 </script>
 
 <style lang="less">
-html {
-  height: 100%;
 
-  body {
-    height: 100%;
-    margin: 0;
-#app {
+
   .el-container {
    
     .el-header,
@@ -55,12 +50,10 @@ html {
     .el-main {
       background-color: #e9eef3;
       color: #333;
-      text-align: center;
+     
     }
   }
-}
-  }
-}
+
 
 </style>
 

@@ -116,14 +116,7 @@ export default {
   background-color: #dbe3ff;
   margin-bottom: 20px;
 }
-html body #app .el-container .el-main .el-header {
-  background-color: #e4e7ed;
-  color: #333;
-  text-align: left;
-  line-height: 60px;
-  font-size: 20px;
-  font-weight: 600;
-}
+
 html body #app .el-container .el-main .el-main {
   background-color: #fff;
 }
