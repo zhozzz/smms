@@ -10,23 +10,21 @@
         label-width="100px"
         class="demo-ruleForm"
       >
-        <el-form-item label="账号" prop="idnum">
-          <el-input v-model.number="ruleForm2.idnum"></el-input>
+        <el-form-item label="账号" prop="username">
+          <el-input type="text" v-model="ruleForm2.username" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="pass">
-          <el-input type="password" v-model="ruleForm2.pass" autocomplete="off"></el-input>
+        <el-form-item label="密码" prop="password">
+          <el-input type="password" v-model="ruleForm2.password" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="确认密码" prop="checkPass">
           <el-input type="password" v-model="ruleForm2.checkPass" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item >
-            <el-dropdown split-button type="primary" trigger="click">添加管理组
-            <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>普通管理员</el-dropdown-item>
-                <el-dropdown-item>高级管理员</el-dropdown-item>
-            </el-dropdown-menu>
-            </el-dropdown>
-        </el-form-item>
+        <el-form-item label="管理组">
+            <el-select v-model="ruleForm2.usergroup" placeholder="管理组">
+              <el-option label="普通用户" value="普通用户"></el-option>
+              <el-option label="高级管理员" value="高级管理员"></el-option>
+            </el-select>
+          </el-form-item>
 
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm2')">添加</el-button>
@@ -37,8 +35,11 @@
   </div>
 </template>
 <script>
+import qs from 'qs';
+
 export default {
   data() {
+    
     const checkSpecificKey = str => {
       var specialKey =
         "[`~!#$^&*()=|{}':;',\\[\\].<>/?~！#￥……&*（）——|{}【】‘；：”“'。，、？]‘'";
@@ -49,15 +50,15 @@ export default {
       }
       return true;
     };
-    var checkId = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error("账号不能为空"));
-      } else if (!checkSpecificKey(value)) {
-        callback(new Error("账号不能包含特殊字符"));
-      } else {
-        callback();
-      }
-    };
+    // var checkId = (rule, value, callback) => {
+    //   if (!value) {
+    //     return callback(new Error("账号不能为空"));
+    //   } else if (value.length < 3 || value.length > 6) {
+    //     callback(new Error("长度在 3 - 6 位"));
+    //   } else {
+    //     callback();
+    //   }
+    // };
     var validatePass = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请输入密码"));
@@ -73,7 +74,7 @@ export default {
     var validatePass2 = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请再次输入密码"));
-      } else if (value !== this.ruleForm2.pass) {
+      } else if (value !== this.ruleForm2.password) {
         callback(new Error("两次输入密码不一致!"));
       } else {
         callback();
@@ -81,21 +82,27 @@ export default {
     };
     return {
       ruleForm2: {
-        pass: "",
+        password: "",
         checkPass: "",
-        idnum: ""
+        username: "",
+        usergroup:""
+        
       },
       rules2: {
-        pass: [{ validator: validatePass, trigger: "blur" }],
+        password: [{ validator: validatePass, trigger: "blur" }],
         checkPass: [{ validator: validatePass2, trigger: "blur" }],
-        idnum: [
-          { validator: checkId, trigger: "blur" },
+        username: [
+          // { validator: checkId, trigger: "blur" },
+          { required: true, message: "请输入账号", trigger: "blur" },
           {
             min: 2,
             max: 6,
-            message: "账号长度在 2 - 6 位,且包含字母开头",
+            message: "账号长度在 2 - 6 位",
             trigger: "blur"
           }
+        ],
+        usergroup: [
+            { required: true, message: '请选择用户组', trigger: 'change' }
         ]
       }
     };
@@ -104,14 +111,33 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("登录成功!");
+          
           let params = {
-            username: this.ruleForm2.idnum,
-            password: this.ruleForm2.pass
+            username: this.ruleForm2.username,
+            password: this.ruleForm2.password,
+            usergroup: this.ruleForm2.usergroup,
           };
           // console.log(params);
+          this.axios.post('http://127.0.0.1:2333/account/accountadd', qs.stringify(params))
+          .then(response=>{
+              // console.log(response.data);
+              let { error_code,  reason } = response.data;
+            if ( error_code===0) {
+              this.$message({
+                type:"success",
+                message: reason
 
-          this.$router.push("/");
+              })
+            }else {
+              this.$message.error(reason)
+            }
+             
+          })
+          .catch(err=>{
+            console.log(err)
+          })
+
+          this.$router.push("/account-manage");
         } else {
           console.log("error submit!!");
           return false;

@@ -7,7 +7,7 @@
       
         <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="账号" prop="idnum">
-                    <el-input v-model.number="ruleForm2.idnum"></el-input>
+                    <el-input type="text" v-model="ruleForm2.idnum"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="pass">
                     <el-input type="password" v-model="ruleForm2.pass" autocomplete="off"></el-input>
@@ -35,16 +35,16 @@ export default { data() {
       }
       return true;
     };
-      var checkId = (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('账号不能为空'));
-        }else if(!checkSpecificKey(value)){
-            callback(new Error("账号不能包含特殊字符"));
-        }else {
-             callback();
-        }
+      // var checkId = (rule, value, callback) => {
+      //   if (!value) {
+      //     return callback(new Error('账号不能为空'));
+      //   }else if(!checkSpecificKey(value)){
+      //       callback(new Error("账号不能包含特殊字符"));
+      //   }else {
+      //        callback();
+      //   }
         
-      };
+      // };
       var validatePass = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入密码'));
@@ -80,8 +80,9 @@ export default { data() {
             { validator: validatePass2, trigger: 'blur' }
           ],
           idnum: [
-            { validator: checkId, trigger: 'blur' },
-            { min: 2, max: 6, message: "账号长度在 2 - 6 位,且包含字母开头", trigger: "blur" }
+          { required: true, message: "请输入账号", trigger: "blur" },
+          
+            { min: 2, max: 6, message: "账号长度在 2 - 6 位", trigger: "blur" }
           ]
         }
       };
