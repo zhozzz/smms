@@ -153,7 +153,7 @@ export default {
 
 
 <style lang="less">
-.el-input__inner {
+#account .el-input__inner {
   width: 300px;
 }
 .el-form-item {
