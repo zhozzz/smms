@@ -93,11 +93,16 @@
 export default {
     data() {
         return {
-            username:"快乐风男"
+            username:window.localStorage.getItem('username')
         }
     },
     methods: {
         outSystem(){
+          window.localStorage.setItem('token',"")
+          this.$message({
+              type: "success",
+              message: "已退出账号，返回登陆页面"
+            });
              this.$router.push("/login");
         },
         manageIndex(){

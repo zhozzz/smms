@@ -19,7 +19,7 @@
         <el-form-item label="确认密码" prop="checkPass">
           <el-input type="password" v-model="ruleForm2.checkPass" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="管理组">
+        <el-form-item label="管理组" prop="usergroup">
             <el-select v-model="ruleForm2.usergroup" placeholder="管理组">
               <el-option label="普通用户" value="普通用户"></el-option>
               <el-option label="高级管理员" value="高级管理员"></el-option>
@@ -50,15 +50,7 @@ export default {
       }
       return true;
     };
-    // var checkId = (rule, value, callback) => {
-    //   if (!value) {
-    //     return callback(new Error("账号不能为空"));
-    //   } else if (value.length < 3 || value.length > 6) {
-    //     callback(new Error("长度在 3 - 6 位"));
-    //   } else {
-    //     callback();
-    //   }
-    // };
+  
     var validatePass = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请输入密码"));
@@ -89,8 +81,8 @@ export default {
         
       },
       rules2: {
-        password: [{ validator: validatePass, trigger: "blur" }],
-        checkPass: [{ validator: validatePass2, trigger: "blur" }],
+        password: [{ required: true,validator: validatePass, trigger: "blur" }],
+        checkPass: [{ required: true,validator: validatePass2, trigger: "blur" }],
         username: [
           // { validator: checkId, trigger: "blur" },
           { required: true, message: "请输入账号", trigger: "blur" },
@@ -153,15 +145,21 @@ export default {
 
 
 <style lang="less">
-#account .el-input__inner {
-  width: 300px;
-}
+
+
+
+#account .demo-ruleForm{
+    background-color: #fff;
 .el-form-item {
   margin: 20px 0;
+  .el-input__inner {
+  width: 300px;
+}
 }
 .el-button--primary {
     color:#000;
     background-color: #fff;
     border-color: #fff;
+}
 }
 </style>

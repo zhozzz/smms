@@ -9,7 +9,7 @@
 export default {
     data() {
         return {
-            username:"快乐风男"
+            username:window.localStorage.getItem('username')
         }
     },
 }

@@ -1,5 +1,6 @@
 <template>
-  <div id="account-manage">
+  <div id="account-manage
+  ">
     <el-header>账号管理</el-header>
     <el-table
       :data="userDataList"
@@ -244,6 +245,8 @@ export default {
 
       this.multipleSelection = val;
     },
+
+    //批量删除
     batchDelete() {
       let selectedId = this.multipleSelection.map(v => v.id);
 
@@ -316,4 +319,5 @@ export default {
 
 
 <style lang="less">
+
 </style>
